@@ -1,24 +1,29 @@
 const express = require('express');
+const {getAllPhotos, likePhoto} = require("../queries/galleryQueries")
 const router = express.Router();
-const galleryItems = require('../modules/gallery.data');
+
 
 // DO NOT MODIFY THIS FILE FOR BASE MODE
 
 // PUT Route
-router.put('/like/:id', (req, res) => {
-    console.log(req.params);
-    const galleryId = req.params.id;
-    for(const galleryItem of galleryItems) {
-        if(galleryItem.id == galleryId) {
-            galleryItem.likes += 1;
-        }
-    }
-    res.sendStatus(200);
+router.put('/like/:id', async (req, res) => {
+  const galleryId = req.params.id;
+  try {
+    await likePhoto(galleryId);
+    res.sendStatus(204);
+  } catch (e) {
+    console.error(e)
+  }
 }); // END PUT Route
 
 // GET Route
-router.get('/', (req, res) => {
-    res.send(galleryItems);
+router.get('/', async (req, res) => {
+  try {
+    const photos = await getAllPhotos()
+    res.send(photos)
+  } catch (e) {
+    console.error(e)
+  }
 }); // END GET Route
 
 module.exports = router;

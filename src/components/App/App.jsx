@@ -7,8 +7,7 @@ import agent from "../../Api/agent";
 function App() {
   const [photos, setPhotos] = useState([]);
   useEffect(() => {
-      agent.Photos.listAll().then(setPhotos)
-    console.log(photos)
+    agent.Photos.listAll().then(setPhotos)
   }, [])
 
   return (
