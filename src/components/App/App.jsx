@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import GalleryList from "../GalleryList/GalleryList";
 import {SiPhotobucket} from 'react-icons/si'
 import axios from 'axios'
+import agent from "../../Api/agent";
 
 function App() {
   const [photos, setPhotos] = useState([]);
   useEffect(() => {
-    axios.get('/gallery')
-      .then(response => response.data)
-      .then(setPhotos)
+      agent.Photos.listAll().then(setPhotos)
+    console.log(photos)
   }, [])
 
   return (
@@ -27,7 +27,7 @@ function App() {
       </header>
       <main className="absolute top-[50%] w-[80vw] 
       left-[50%] transform -translate-x-1/2 -translate-y-1/2">
-        <GalleryList photos={photos}/>
+        <GalleryList setPhotos={setPhotos} photos={photos}/>
       </main>
     </div>);
 }
