@@ -1,12 +1,10 @@
 import {AiOutlineLike} from 'react-icons/ai'
 import {useState} from "react";
-import axios from "axios";
+import {BsFillTrash2Fill} from 'react-icons/bs'
 import agent from "../../Api/agent";
 
 export default function GalleryItem({photo, setPhotos}) {
   const {id, path, description, likes} = photo
-  const [liked, setLiked] = useState(false);
-  const [localLikes, setLocalLikes] = useState(0);
   const [showDescription, setShowDescription] = useState(false);
 
   const onShowDescription = () => {
@@ -18,12 +16,19 @@ export default function GalleryItem({photo, setPhotos}) {
     const newPhotos = await agent.Photos.listAll();
     setPhotos(newPhotos);
   }
+  
+  const deletePhoto = async (id) => {
+    console.log("CLICKED")
+    await agent.Photos.removePhoto(id)
+    const newPhotos = await agent.Photos.listAll();
+    setPhotos(newPhotos);
+  }
 
   return (
     <div onClick={onShowDescription}
-         className={`carousel-item cursor-pointer ${showDescription ? "bg-gradient-to-r from-gray-800  to-gray-950" : ""} relative `}
+         className={`carousel-item group cursor-pointer ${showDescription ? "bg-gradient-to-r from-gray-800  to-gray-950" : ""} relative `}
          key={id}>
-      <img className={`${showDescription && " opacity-20"} h-96 `} src={path} alt={description}/>
+      <img className={`${showDescription ? " opacity-20" : "group-hover:opacity-70"} h-96 transition-all duration-300 `} src={path} alt={description}/>
       <div
         className={`top-[50%] text-2xl ${showDescription ? "block" : "hidden"} text-white left-[50%] absolute transform -translate-x-1/2 -translate-y-1/2`}>{description}</div>
       <div className="chat chart-start absolute bottom-2 left-2 ">
@@ -34,24 +39,25 @@ export default function GalleryItem({photo, setPhotos}) {
         <div className="hidden chat-bubble  bg-accent peer-hover:block absolute bottom-2 left-12 text-xs">{likes} people liked this photo</div>
       </div>
       <label
-        className={`btn absolute bottom-2 right-2 btn-circle swap swap-rotate`}>
+        className={`btn absolute group-hover:inline-grid transition-all duration-300 hidden bottom-2 right-2 btn-circle swap swap-rotate`}>
         {/* this hidden checkbox controls the state */}
-        <input value={id} onChange={() => likePhoto(id)} type="checkbox"/>
+        <input  onClick={() => likePhoto(id)} type="checkbox"/>
 
         <AiOutlineLike className="swap-off fill-current" size={20}/>
 
         <AiOutlineLike className="swap-on fill-current" size={20}/>
 
       </label>
+      <label
+        className={`btn-error hidden transition-all duration-300 group-hover:inline-grid absolute top-2 right-2 btn-circle swap swap-rotate`}>
+        {/* this hidden checkbox controls the state */}
+        <input onChange={() => deletePhoto(id)}  type="checkbox"/>
+
+        <BsFillTrash2Fill className="swap-off fill-current" size={20}/>
+
+        <BsFillTrash2Fill className="swap-on fill-current" size={20}/>
+
+      </label>
     </div>
   );
 }
-
-// <div className="chat chat-start">
-//   <div className="chat-image avatar">
-//     <div className="w-10 rounded-full">
-//       <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-//     </div>
-//   </div>
-//   <div className="chat-bubble">It was said that you would, destroy the Sith, not join them.</div>
-// </div>

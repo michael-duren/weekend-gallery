@@ -4,6 +4,7 @@ import {SiPhotobucket} from 'react-icons/si'
 import axios from 'axios'
 import agent from "../../Api/agent";
 import PhotoForm from "../PhotoForm/PhotoForm";
+import Header from "../../Header/Header";
 
 function App() {
   const [photos, setPhotos] = useState([]);
@@ -13,21 +14,7 @@ function App() {
   
   return (
     <div className="min-h-[100vh]">
-      <header className="flex flex-wrap justify-between p-8">
-        <div className="flex items-start gap-4">
-          <h1 className="text-5xl font-logo">
-            <span className="flex items-center justify-center gap-4">
-              PHOTO <SiPhotobucket size="60" className="inline"/>
-            </span>
-            <div className="text-6xl">
-              GALLERY
-            </div>
-          </h1>
-        </div>
-        <div>
-          <PhotoForm setPhotos={setPhotos} />
-        </div>
-      </header>
+      <Header setPhotos={setPhotos} />
       <main className="mt-20">
         <GalleryList setPhotos={setPhotos} photos={photos}/>
       </main>

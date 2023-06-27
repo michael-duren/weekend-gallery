@@ -32,10 +32,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   const {description} = req.body;
   try {
     const result = await createPhoto(`images/uploads/${req.file.filename}`, description)
-    console.log(result)
     res.sendStatus(201);
-    console.log("GOT FILE", req.file)
-    console.log("GOT IT", description)
   } catch (e) {
     console.error(e)
     res.sendStatus(400)
@@ -55,6 +52,7 @@ router.put('/like/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const photoId = req.params.id
+  console.log(photoId)
   try {
     await deletePhoto(photoId);
     res.sendStatus(204)

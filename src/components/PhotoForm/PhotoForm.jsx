@@ -23,9 +23,7 @@ export default function PhotoForm({setPhotos}) {
     formData.append("description", description)
 
     try {
-      await axios.post('/gallery', formData, {
-        'Content-Type': 'multipart/form-data'
-      })
+      await agent.Photos.createPhoto(formData)
       toast.success("Your photo has been added! 🥳")
       const newList = await agent.Photos.listAll();
       setPhotos(newList)
@@ -53,11 +51,11 @@ export default function PhotoForm({setPhotos}) {
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-light text-secondary-content" htmlFor="photo">Photo</label>
-            <input onChange={(e) => handleFileChange(e)} name="photo" type="file" className="file-input w-full max-w-xs"/>
+            <input required accept="image/jpeg, image/jpg, image/png" onChange={(e) => handleFileChange(e)} name="photo" type="file" className="file-input w-full max-w-xs"/>
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-light text-secondary-content" htmlFor="Description">Description</label>
-            <input value={description} type="text" name="Description" placeholder="Description"
+            <input required value={description} type="text" name="Description" placeholder="Description"
                    onChange={handleDescriptionChange} className="input w-full max-w-xs"/>
           </div>
           <button className="btn">Submit</button>
