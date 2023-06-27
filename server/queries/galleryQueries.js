@@ -3,7 +3,8 @@ const pool = require("../modules/pool");
 const getAllPhotos = async () => {
   const query = "SELECT * FROM gallery ORDER BY id asc";
   try {
-    return await pool.query(query);
+    const result = await pool.query(query);
+    return result.rows
     
   } catch (e) {
    console.error(e) 
@@ -18,6 +19,20 @@ const getSinglePhoto = async (id) => {
     return result.rows[0]
   } catch (e) {
    console.error(e);
+  }
+}
+
+const createPhoto = async (description, path) => {
+  const query = "INSERT INTO gallery" +
+    " (path, description, likes)" +
+    " VALUES ($1, $2, $3);"
+  
+  const queryParams = [description, path, 0]
+  
+  try {
+    return await pool.query(query, queryParams)
+  } catch (e) {
+   console.error(e) 
   }
 }
 
@@ -37,5 +52,6 @@ const likePhoto = async (id) => {
 module.exports = {
   getAllPhotos,
   getSinglePhoto,
+  createPhoto,
   likePhoto
 }
