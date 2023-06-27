@@ -1,7 +1,7 @@
 const pool = require("../modules/pool");
 
 const getAllPhotos = async () => {
-  const query = "SELECT * FROM gallery ORDER BY id asc";
+  const query = "SELECT * FROM gallery ORDER BY id desc";
   try {
     const result = await pool.query(query);
     return result.rows
@@ -38,7 +38,6 @@ const createPhoto = async (description, path) => {
 
 const likePhoto = async (id) => {
   const photo = await getSinglePhoto(id)
-  console.log("PHOTO", photo)
   const query = "UPDATE gallery SET likes=$1 WHERE id=$2"
   const queryParams = [(photo.likes + 1), id]
   
@@ -49,9 +48,20 @@ const likePhoto = async (id) => {
   }
 }
 
+const deletePhoto = async (id) => {
+ const query = `DELETE FROM gallery WHERE Id=$1`
+ const queryParams = [id]
+ try {
+   return await pool.query(query, queryParams)
+ } catch (e) {
+   console.error(e)
+ }
+}
+
 module.exports = {
   getAllPhotos,
   getSinglePhoto,
   createPhoto,
-  likePhoto
+  likePhoto,
+  deletePhoto 
 }

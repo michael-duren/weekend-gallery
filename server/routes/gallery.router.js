@@ -1,9 +1,10 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path')
-const {getAllPhotos, createPhoto, likePhoto} = require("../queries/galleryQueries")
+const {getAllPhotos, createPhoto, likePhoto, deletePhoto} = require("../queries/galleryQueries")
 const router = express.Router();
 
+// MULTER CONFIG
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const saveToPath = path.join(__dirname, '..', '..', 'public', 'images', 'uploads')
@@ -15,9 +16,6 @@ const storage = multer.diskStorage({
   }
 })
 const upload = multer({storage})
-
-
-// DO NOT MODIFY THIS FILE FOR BASE MODE
 
 // GET Route
 router.get('/', async (req, res) => {
@@ -46,14 +44,24 @@ router.post('/', upload.single('file'), async (req, res) => {
 
 // PUT Route
 router.put('/like/:id', async (req, res) => {
-  const galleryId = req.params.id;
+  const photoId = req.params.id;
   try {
-    await likePhoto(galleryId);
+    await likePhoto(photoId);
     res.sendStatus(204);
   } catch (e) {
     console.error(e)
   }
 }); // END PUT Route
+
+router.delete('/:id', async (req, res) => {
+  const photoId = req.params.id
+  try {
+    await deletePhoto(photoId);
+    res.sendStatus(204)
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 
 module.exports = router;

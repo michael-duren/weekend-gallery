@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import GalleryList from "../GalleryList/GalleryList";
 import {SiPhotobucket} from 'react-icons/si'
 import axios from 'axios'
@@ -25,13 +25,7 @@ function App() {
           </h1>
         </div>
         <div>
-          <div className="collapse bg-base-200">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content [input:checked~&]:bg-secondary [input:checked~&]:text-secondary-content">
-              Add Photo
-            </div>
-            <PhotoForm />
-          </div>
+          <PhotoForm setPhotos={setPhotos} />
         </div>
       </header>
       <main className="mt-20">
